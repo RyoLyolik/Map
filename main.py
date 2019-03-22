@@ -3,7 +3,6 @@ import os
 import sys, requests
 from func import Mapping
 
-screen = None
 size = w, h, = 600, 450
 pygame.init()
 screen = pygame.display.set_mode(size)
@@ -14,7 +13,7 @@ class Win:
         self.screen_update()
     def screen_update(self):
         self.run = True
-        self.map_image = self.load_map(mapping.start)
+        self.map_image = self.load_map(mapping.start())
         self.map_now = pygame.sprite.Sprite()
         self.map_now.image = self.map_image
         self.map_now.rect = self.map_now.image.get_rect()
@@ -29,13 +28,12 @@ class Win:
 
             pygame.display.flip()
 
-    def load_map(self, function):
-        name = function()
+    def load_map(self, name):
         fullname = os.path.join(name)
         try:
             image = pygame.image.load(fullname)
         except pygame.error as message:
-            print('Cannot load image:', name)
+            print('Cannot load image: ', name)
             raise SystemExit(message)
         print(image)
         image = image.convert_alpha()
